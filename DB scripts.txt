@@ -1,0 +1,363 @@
+USE [master]
+GO
+
+CREATE DATABASE [QulixTestTaskDB]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'QulixTestTaskDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS\MSSQL\DATA\QulixTestTaskDB.mdf' , SIZE = 3072KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
+ LOG ON 
+( NAME = N'QulixTestTaskDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS\MSSQL\DATA\QulixTestTaskDB_log.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+GO
+
+ALTER DATABASE [QulixTestTaskDB] SET COMPATIBILITY_LEVEL = 120
+GO
+
+
+------------------------------------------------------------------------
+
+
+USE [QulixTestTaskDB]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Employee](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[firstname] [nchar](20) NULL,
+	[secondname] [nchar](20) NULL,
+	[startdate] [datetime] NULL,
+	[positiontypeid] [int] NULL,
+	[companyid] [int] NULL,
+ CONSTRAINT [PK_Employee] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+INSERT INTO Employee(firstname, secondname, startdate, positiontypeid, companyid)
+VALUES ('Bob', 'White', '10-10-22', 1, 1),
+('Alex', 'Black', '11-11-21', 2, 2),
+('Bred', 'Green', '08-08-22', 3, 3),
+('Ann', 'Brown', '09-09-22', 4, 4);
+
+------------------------------------------------------------------------
+
+
+USE [QulixTestTaskDB]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Company](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [nchar](20) NULL,
+	[size] [int] NULL,
+	[businesstype] [nchar](20) NULL,
+ CONSTRAINT [PK_Company] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+INSERT INTO Company(name, size, businesstype)
+VALUES ('Microsoft', 10000, 1),
+('Amazon', 5000, 2),
+('Apple', 9000, 3),
+('Samsung', 11000, 4);
+
+
+------------------------------------------------------------------------
+
+
+USE [QulixTestTaskDB]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[companymanager_createcompany] 
+@Companyname nvarchar(20) = NULL,
+@Size int = NULL,
+@Businesstype nvarchar(20) = NULL
+AS
+
+INSERT INTO Company(name, size, businesstype)
+VALUES (@Companyname, @Size, @Businesstype);
+
+GO
+
+
+------------------------------------------------------------------------
+
+
+USE [QulixTestTaskDB]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[companymanager_deletecompany] 
+@CompanyId int
+AS
+
+DELETE FROM Company
+WHERE Id = @CompanyId
+
+GO
+
+
+------------------------------------------------------------------------
+
+
+USE [QulixTestTaskDB]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[companymanager_getcompanies]
+AS 
+BEGIN 
+
+SELECT  
+c.Id,
+c.name as companyname,
+c.size,
+c.businesstype
+from Company c
+END;
+
+GO
+
+
+------------------------------------------------------------------------
+
+
+USE [QulixTestTaskDB]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[companymanager_getcompanybyid]
+@CompanyId int = NULL
+AS 
+BEGIN 
+
+SELECT TOP 1  
+c.Id,
+c.name as companyname,
+c.size,
+c.businesstype
+FROM Company c
+WHERE Id = @CompanyId
+END;
+
+GO
+
+
+------------------------------------------------------------------------
+
+
+USE [QulixTestTaskDB]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[companymanager_updatecompany] 
+@CompanyId int,
+@Companyname nvarchar(30) = NULL,
+@Size int = NULL,
+@Businesstype nvarchar(30) = NULL
+AS
+
+UPDATE Company
+set name = @Companyname,
+size = @Size,
+businesstype = @Businesstype
+WHERE Id = @CompanyId
+
+GO
+
+
+------------------------------------------------------------------------
+
+
+USE [QulixTestTaskDB]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[employeemanager_createemployee] 
+@Firstname nvarchar(20) = NULL,
+@Secondname nvarchar(20) = NULL,
+@Startdate datetime = NULL,
+@Positiontypeid int = NULL,
+@Companyid int = NULL
+AS
+
+INSERT INTO Employee(firstname, secondname, startdate, positiontypeid, companyid)
+VALUES (@Firstname, @Secondname, @Startdate, @Positiontypeid, @Companyid);
+
+
+GO
+
+
+------------------------------------------------------------------------
+
+
+USE [QulixTestTaskDB]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[employeemanager_deleteemployee] 
+@EmployeeId int
+AS
+
+DELETE FROM Employee
+WHERE Id = @EmployeeId
+
+GO
+
+
+------------------------------------------------------------------------
+
+
+USE [QulixTestTaskDB]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[employeemanager_getemployeebyid]
+@EmployeeId int
+AS 
+BEGIN 
+
+SELECT TOP 1
+e.Id,
+e.firstname,
+e.secondname,
+e.startdate,
+e.positiontypeid,
+c.Id as companyid,
+c.name as companyname
+FROM Employee e
+LEFT JOIN Company c on e.companyid = c.Id
+WHERE e.Id = @EmployeeId;
+
+END;
+
+GO
+
+
+------------------------------------------------------------------------
+
+USE [QulixTestTaskDB]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[employeemanager_getemployees]
+AS 
+BEGIN 
+
+SELECT  
+e.Id,
+e.firstname,
+e.secondname,
+e.startdate,
+e.positiontypeid,
+c.Id as companyid,
+c.name as companyname
+FROM Employee e
+LEFT JOIN Company c ON e.companyid = c.Id;
+
+END;
+
+GO
+
+
+------------------------------------------------------------------------
+
+
+USE [QulixTestTaskDB]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[employeemanager_updateemployee] 
+@EmployeeId int,
+@Firstname nvarchar(20) = NULL,
+@Secondname nvarchar(20) = NULL,
+@Startdate datetime = NULL,
+@Positiontypeid int = NULL,
+@Companyid int = NULL
+AS
+
+UPDATE Employee
+set firstname = @Firstname,
+secondname = @Secondname,
+startdate = @Startdate,
+positiontypeid = @Positiontypeid,
+companyid = @Companyid
+WHERE Id = @EmployeeId
+
+GO
+
+
+
