@@ -1,0 +1,26 @@
+﻿@model Company
+@{
+    var companies = ViewBag.Companies ?? new List<Company>();
+}
+
+<form class="form" asp-action="Edit" method="post">
+    <input hidden name="id" value="@Model.Id" />
+    <div class="form-input">
+        <label for="companyname">Company name:</label><br>
+        <input type="text" id="companyname" name="companyname" value="@Model.CompanyName">
+    </div>
+    <br />
+
+    <div class="form-input">
+        <label for="size">Second name:</label><br>
+        <input type="number" id="size" name="size" value="@Model.Size">
+    </div>
+    <br />
+
+    <div class="form-input">
+        <label for="businesstype">Business type:</label><br>
+        <input type="text" id="businesstype" name="businesstype" value="@Model.BusinessType">
+    </div>
+    <br />
+    <button type="submit">Edit</button>
+</form>

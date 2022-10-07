@@ -1,0 +1,69 @@
+﻿@model Employee
+@{
+    var companies = ViewBag.Companies ?? new List<Company>();
+}
+
+<form class="form" asp-action="Edit" method="post">
+    <input hidden name="id" value="@Model.Id" />
+
+    <div class="form-input">
+        <label for="firstname">First name:</label><br>
+        <input type="text" id="firstname" name="firstname" value="@Model.FirstName">
+    </div>
+    <br />
+
+    <div class="form-input">
+        <label for="secondname">Second name:</label><br>
+        <input type="text" id="secondname" name="secondname" value="@Model.SecondName">
+    </div>
+    <br />
+
+    <div class="form-input">
+        <label for="startdate">Start date:</label><br>
+        <input type="date" id="startdate" name="startdate" value="@Model.StartDate.ToString("yyyy-MM-dd")">
+    </div>
+    <br />
+
+    <div class="form-input">
+        <label for="position">Position:</label><br>
+        <select name="positiontypeid" id="position">
+            <option value="1">Software developer</option>
+            <option value="2">Manual QA</option>
+            <option value="3">Business Analyst</option>
+            <option value="4">Project Manager</option>
+        </select>
+    </div>
+    <br />
+
+    <div class="form-input">
+        <label for="company">Company:</label><br>
+        <select name="companyid" id="company">
+            @foreach (var company in companies)
+            {
+                <option value="@company.Id">@company.CompanyName</option>
+            }
+        </select>
+    </div>
+    <br />
+
+    <button type="submit">Edit</button>
+</form>
+
+@section Scripts{
+<script type="text/javascript">
+    var companyId = '@(Model.CompanyId)';
+    $("#company > option").each(function() {
+        if($(this).val() === position){
+            $(this).attr('selected', 'selected');
+        }
+    });
+
+
+    var position = '@(Model.PositionTypeId)';
+    $("#position > option").each(function() {
+        if($(this).val() === position){
+            $(this).attr('selected', 'selected');
+        }
+    });
+</script>
+}

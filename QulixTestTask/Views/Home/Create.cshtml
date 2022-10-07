@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Company>
+@{ }
+
+<form class="form" asp-action="Create" method="post">
+    <div class="form-input">
+        <label for="firstname">First name:</label>
+        <input type="text" id="firstname" name="firstname">
+    </div>
+    <br />
+
+    <div class="form-input">
+        <label for="secondname">Second name:</label>
+        <input type="text" id="secondname" name="secondname">
+    </div>
+    <br />
+
+    <div class="form-input">
+        <label for="startdate">Start date:</label>
+        <input type="date" id="startdate" name="startdate" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+    </div>
+    <br />
+
+    <div class="form-input">
+        <label for="position">Position:</label>
+        <select name="positiontypeid" id="position">
+            <option value="1">Software developer</option>
+            <option value="2">Manual QA</option>
+            <option value="3">Business Analyst</option>
+            <option value="4">Project Manager</option>
+        </select>
+    </div>
+    <br />
+
+    <div class="form-input">
+        <label for="company">Company:</label>
+        <select name="companyid" id="company">
+            @foreach (var company in Model)
+            {
+                <option value="@company.Id">@company.CompanyName</option>
+            }
+        </select>
+    </div>
+    <br />
+
+    <button type="submit">Create</button>
+</form>

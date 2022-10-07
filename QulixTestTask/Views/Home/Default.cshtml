@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Employee>
+@{
+}
+
+<div class="">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>First name</th>
+                <th>Second name</th>
+                <th>Start date of work</th>
+                <th>Position</th>
+                <th>Company</th>
+                <th>Edit</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>@employee.Id</td>
+                <td>@employee.FirstName</td>
+                <td>@employee.SecondName</td>
+                <td>@employee.StartDate.ToString("dd/MM/yyyy")</td>
+                <td>@employee.PositionType</td>
+                <td>@employee.CompanyName</td>
+                <td>
+                    <a href="@("/home/edit?employeeId=" + employee.Id)">
+                        Edit
+                    </a>
+                </td>
+                <td>
+                    <a href="@("/home/remove?employeeId=" + employee.Id)">
+                        Remove
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <hr />
+
+    <a class="btn btn-info" href="/home/create">
+        Create
+    </a>
+</div>
